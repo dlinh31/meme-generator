@@ -6,12 +6,11 @@
  * - Don't worry about adding any functionality yet
  */
 
-import memesData from "../memesData"
-import {useState} from "react"
+
+import {useState, useEffect} from "react"
 
 
 function MemeForm ({title, placeholder, name, data, handleChange}) {
-
     return (
         <div className="Meme">
             <h3 className="Meme--text">{title}</h3>
@@ -24,7 +23,7 @@ function MemeForm ({title, placeholder, name, data, handleChange}) {
 
 export default function Meme (){
 
-    const allMemesImages = memesData["data"]["memes"];
+    const [allMemesImages, setAllMemesImage] = useState([]);
     const [meme, setMeme] = useState({
             topText: "",
             bottomText: "",
@@ -49,9 +48,18 @@ export default function Meme (){
                 }
             )
         })
-        console.log(meme);
+
 
     }
+
+    useEffect(()=> {
+        fetch("https://api.imgflip.com/get_memes")
+        .then(response => response.json()
+        )
+        .then(data => {
+            setAllMemesImage(data['data']['memes'])})
+    }, [])
+
 
     return (
         <div>
